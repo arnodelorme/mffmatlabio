@@ -21,14 +21,14 @@ if ispc
     outputFolder = '';
     error('Change folders');
 elseif ismac
-    baseFolder = '/Users/xxx/GoogleDrive/EGI';
+    baseFolder = '/Users/arno/GoogleDrive/EGI';
     outputFolder = '/data/philips/temp/';
 else
     baseFolder = '/home/xxx/matlab';
 end
 
 removeICA = 0;
-testtarget = 'fileio'; % may be matlab, eeglab, fileio or fileioeeglab (compare EEGLAB and file-io) - not case sensitive
+testtarget = 'eeglab'; % may be matlab, eeglab, fileio or fileioeeglab (compare EEGLAB and file-io) - not case sensitive
 
 if ~strcmpi(testtarget, 'matlab') && ~strcmpi(testtarget, 'fileio')
     if ~exist('eeglab.m')
@@ -101,7 +101,7 @@ datasetsToLoad = 1:length(inputFilenames); % dataset 16 POTENTIAL PROBLEM
 % end
 % return
 
-for iFile = 20:27 %datasetsToLoad %1 %[20 23] %1:length(datasetsToLoad)
+for iFile = datasetsToLoad %datasetsToLoad %1 %[20 23] %1:length(datasetsToLoad)
     errorMsg = '';
     
     fprintf('Reading file %s\n', inputFilenames{iFile});

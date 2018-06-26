@@ -70,7 +70,7 @@
 function versionstr = eegplugin_mffmatlabio(fig, trystrs, catchstrs)
 
     %global EEG
-    versionstr = '0.95';
+    versionstr = '0.96';
     if nargin < 3
         error('eegplugin_mffmatlabio requires 3 arguments');
     end;
