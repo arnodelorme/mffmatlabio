@@ -37,6 +37,9 @@ Known limitations to the Philips MFF import/export plugin
 
 Revision history
 ----------------
+Version 1.00
+- Add file separator to EEGLAB export menu
+
 Version 0.96
 - Add license for each file
 - Clean up documentation
