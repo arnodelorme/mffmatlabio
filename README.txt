@@ -37,6 +37,10 @@ Known limitations to the Philips MFF import/export plugin
 
 Revision history
 ----------------
+Version 2.00
+- Octave compatibility
+- Fix issue with boundary latency when importing file mff version 0
+
 Version 1.00
 - Add file separator to EEGLAB export menu
 
