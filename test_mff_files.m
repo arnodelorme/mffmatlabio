@@ -27,6 +27,10 @@ else
     baseFolder = '/home/xxx/matlab';
 end
 
+if exist('OCTAVE_VERSION', 'builtin') ~= 0
+    confirm_recursive_rmdir(false);
+end
+
 removeICA = 0;
 testtarget = 'eeglab'; % may be matlab, eeglab, fileio or fileioeeglab (compare EEGLAB and file-io) - not case sensitive
 
@@ -67,7 +71,10 @@ inputFilenames = { ...
     'Net Station Files from EGI/OtherFilesRobert/original/eeg/egi/NS500Sine6Hz.mff' ...
     'Net Station Files from EGI/Bugs/SPBI023 20150414 1357.mff' ...
     'Net Station Files from EGI/Treys_files/MMVTD_Continuous_EEG.mff' ...
-    'Net Station Files from EGI/Treys_files/MMI_HC1_20180314_093330_physio_only.mff' };
+    'Net Station Files from EGI/Treys_files/MMI_HC1_20180314_093330_physio_only.mff' ...
+    ...
+    'Net Station Files from EGI/Bugs/mattan/2002 20120824 dis copy.mff' ...
+    };
 
 comments = { ...
     '' '' '' '' '' ...
@@ -86,13 +93,14 @@ comments = { ...
     ''  ...
     'Issue with ''relativeBeginTime (event 364) has been transmitted to Philips for comments' ...
     'Differences in begintime have been verified and are OK (begintime diff than 10 microseconds)' ... % dataset 27
+    '' ...
     };
 
 %%
 ALLEEG = [];
 % the error is with dataset 7
 fileDairy = sprintf('%s-%s.txt', computer, datestr(now, 'yyyymmddTHHMMSS'));
-datasetsToLoad = 1:length(inputFilenames); % dataset 16 POTENTIAL PROBLEM
+datasetsToLoad = length(inputFilenames); % dataset 16 POTENTIAL PROBLEM
 
 % scan file content
 % for iFile = datasetsToLoad %1 %[20 23] %1:length(datasetsToLoad)
@@ -114,6 +122,7 @@ for iFile = datasetsToLoad %datasetsToLoad %1 %[20 23] %1:length(datasetsToLoad)
 
         % test EEGLAB import/export
         EEG = mff_import(fullfile(baseFolder, inputFilenames{iFile}));
+        return
     
         if removeICA
             EEG = pop_eegfiltnew(EEG, [],1,826,1,[],0);
@@ -125,34 +134,36 @@ for iFile = datasetsToLoad %datasetsToLoad %1 %[20 23] %1:length(datasetsToLoad)
         EEG2 = mff_import(outputFile);
         
     else
-        % test Fileio import/export
-%         header = mff_fileio_read_header(fullfile(baseFolder, inputFilenames{iFile}));
-%         dat    = mff_fileio_read_data(fullfile(baseFolder, inputFilenames{iFile}));
-%         event  = mff_fileio_read_event(fullfile(baseFolder, inputFilenames{iFile}));
-        try
-            ft_defaults;        
-            hdr   = ft_read_header(fullfile(baseFolder, inputFilenames{iFile}), 'headerformat', 'egi_mff_v3');
-            event = ft_read_event( fullfile(baseFolder, inputFilenames{iFile}), 'eventformat', 'egi_mff_v3', 'header', hdr);
-            dat   = ft_read_data( fullfile(baseFolder, inputFilenames{iFile}), 'dataformat', 'egi_mff_v3', 'header', hdr);
-            EEG    = pop_fileio2(hdr, dat, event);
-        catch
-            l = lasterror;
-            errorMsg = l.message;
-        end
-    
-        if strcmpi(testtarget, 'fileioeeglab')
+        
+        if strcmpi(testtarget, 'matlab')
             EEG2   = mff_import(fullfile(baseFolder, inputFilenames{iFile}));
         else
+            
             try
-                ft_write_data(outputFile, dat, 'header', hdr, 'event', event, 'dataformat', 'mff');
-                % mff_fileio_write(outputFile, header, dat, event);
-                hdr2   = ft_read_header(outputFile, 'headerformat', 'egi_mff_v3');
-                event2 = ft_read_event( outputFile, 'eventformat', 'egi_mff_v3', 'header', hdr);
-                dat2   = ft_read_data(  outputFile, 'dataformat', 'egi_mff_v3', 'header', hdr);
-                EEG2   = pop_fileio2(hdr2, dat2, event2);
+                ft_defaults;
+                hdr   = ft_read_header(fullfile(baseFolder, inputFilenames{iFile}), 'headerformat', 'egi_mff_v3');
+                event = ft_read_event( fullfile(baseFolder, inputFilenames{iFile}), 'eventformat', 'egi_mff_v3', 'header', hdr);
+                dat   = ft_read_data( fullfile(baseFolder, inputFilenames{iFile}), 'dataformat', 'egi_mff_v3', 'header', hdr);
+                EEG    = pop_fileio2(hdr, dat, event);
             catch
                 l = lasterror;
                 errorMsg = l.message;
+            end
+            
+            if strcmpi(testtarget, 'fileioeeglab')
+                EEG2   = mff_import(fullfile(baseFolder, inputFilenames{iFile}));
+            else
+                try
+                    ft_write_data(outputFile, dat, 'header', hdr, 'event', event, 'dataformat', 'mff');
+                    % mff_fileio_write(outputFile, header, dat, event);
+                    hdr2   = ft_read_header(outputFile, 'headerformat', 'egi_mff_v3');
+                    event2 = ft_read_event( outputFile, 'eventformat', 'egi_mff_v3', 'header', hdr);
+                    dat2   = ft_read_data(  outputFile, 'dataformat', 'egi_mff_v3', 'header', hdr);
+                    EEG2   = pop_fileio2(hdr2, dat2, event2);
+                catch
+                    l = lasterror;
+                    errorMsg = l.message;
+                end
             end
         end
     end
