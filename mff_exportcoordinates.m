@@ -28,15 +28,6 @@ function mff_exportcoordinates(EEG, mffFile)
 p = fileparts(which('mff_importsignal.m'));
 warning('off', 'MATLAB:Java:DuplicateClass');
 javaaddpath(fullfile(p, 'MFF-1.2.2-jar-with-dependencies.jar'));
-import com.egi.services.mff.api.MFFFactory;
-import com.egi.services.mff.api.MFFResourceType;
-import com.egi.services.mff.api.LocalMFFFactoryDelegate;
-import com.egi.services.mff.utility.ResourceUnmarshalException;
-import com.egi.services.mff.api.SensorLayout;
-import com.egi.services.mff.api.Sensor;
-import com.egi.services.mff.api.Key;
-import com.egi.services.mff.api.Neighbor;
-import java.util.ArrayList;
 warning('on', 'MATLAB:Java:DuplicateClass');
 
 % remove PNS channels
@@ -74,7 +65,7 @@ coordinateObj = mfffactory.openResourceAtURI(coordinatefilename, coordinatetype)
 layoutObj = javaObject('com.egi.services.mff.api.SensorLayout');
 layoutObj.setName('Exported from EEGLAB');
 
-jList = java.util.ArrayList;
+jList = javaObject('java.util.ArrayList');
 for iSensor = 1:length(chanlocs)
     sensorObj = javaObject('com.egi.services.mff.api.Sensor');
     

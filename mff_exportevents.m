@@ -28,16 +28,6 @@ function mff_exportevents(EEG, mffFile)
 p = fileparts(which('mff_importsignal.m'));
 warning('off', 'MATLAB:Java:DuplicateClass');
 javaaddpath(fullfile(p, 'MFF-1.2.2-jar-with-dependencies.jar'));
-import com.egi.services.mff.api.MFFFactory;
-import com.egi.services.mff.api.MFFResourceType;
-import com.egi.services.mff.api.LocalMFFFactoryDelegate;
-import com.egi.services.mff.utility.ResourceUnmarshalException;
-import com.egi.services.mff.api.Signal;
-import com.egi.services.mff.api.SignalBlock;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
 warning('on', 'MATLAB:Java:DuplicateClass');
 
 events   = EEG.event;
@@ -62,7 +52,7 @@ end
 fprintf('Exporting %d events...\n', length(events));
 eventtrackObj = mfffactory.openResourceAtURI(eventtrackfilename, eventtracktype);
 
-jList = java.util.ArrayList;    
+jList = javaObject('java.util.ArrayList');
 addLatency = 0;
 multiplier = 24*60*60*srate;
 keyWarning = true;
@@ -80,7 +70,7 @@ for iEvent = 1:length(events)
         eventObj.setSourceDevice(events(iEvent).sourcedevice );
         
         if isfield(events, 'mffkeysbackup') && ~isempty(events(iEvent).mffkeysbackup)
-            jListKeys = java.util.ArrayList;
+            jListKeys = javaObject('java.util.ArrayList');
             tmpKeys = eval(events(iEvent).mffkeysbackup);
             for iKey = 1:length(tmpKeys);
                 keyObj = javaObject('com.egi.services.mff.api.Key');

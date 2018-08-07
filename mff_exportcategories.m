@@ -33,16 +33,6 @@ end
 p = fileparts(which('mff_importsignal.m'));
 warning('off', 'MATLAB:Java:DuplicateClass');
 javaaddpath(fullfile(p, 'MFF-1.2.2-jar-with-dependencies.jar'));
-import com.egi.services.mff.api.MFFFactory;
-import com.egi.services.mff.api.MFFResourceType;
-import com.egi.services.mff.api.LocalMFFFactoryDelegate;
-import com.egi.services.mff.utility.ResourceUnmarshalException;
-import com.egi.services.mff.api.Signal;
-import com.egi.services.mff.api.SignalBlock;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
 warning('on', 'MATLAB:Java:DuplicateClass');
 
 % Create a factory.
@@ -76,14 +66,14 @@ end
 
 events = events(indtle);
 uniqueType = unique( { events.type } );
-jCatList = java.util.ArrayList;
+jCatList = javaObject('java.util.ArrayList');
 epochLen = [];
 for iType = 1:length(uniqueType)
     trials = strmatch( uniqueType{iType}, { events.type }, 'exact'); % get time locking events
     
     catObj = javaObject('com.egi.services.mff.api.Category');
     catObj.setName( events(trials(1)).type );
-    jList = java.util.ArrayList;
+    jList = javaObject('java.util.ArrayList');
     for iTrial = 1:length(trials)
         segmentObj = javaObject('com.egi.services.mff.api.Segment');
         epoch      = events(trials(iTrial)).epoch;
