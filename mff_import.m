@@ -72,7 +72,15 @@ if nargin < 1
     help mff_import;
     return;
 end
-    
+
+% add full path if possible
+mffPath = fileparts(mffFile);
+if isempty(mffPath)
+    mffFile = fullfile(pwd, mffFile);
+else
+    disp('Make sure you call this function with the full MFF ressource path name ******');
+end
+
 % import data
 [floatData, allDataSize, srate, nchans] = mff_importsignal(mffFile);
 
