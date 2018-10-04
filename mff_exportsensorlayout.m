@@ -38,7 +38,7 @@ if length(matStruct.sensors) ~= length(EEG.chanlocs)
         currenChans = 1:size(EEG.data,1);
     else
         % find EEG channels and convert them
-        eegChans = cellfun(@(x)isequal(x, 'EEG'), {chanlocs.type});
+        eegChans = cellfun(@(x)isequal(lower(x), 'eeg'), {chanlocs.type});
         try
             currenChans = cellfun(@(x)str2num(x(2:end)), {chanlocs(eegChans).labels});
         catch
