@@ -30,7 +30,7 @@ function mff_exportsignal(EEG, mffFile)
 if ~isempty(EEG.chanlocs) && isfield(EEG.chanlocs, 'type')
     allTypes = { EEG.chanlocs.type };
     allTypes = cellfun(@(x)num2str(x), allTypes, 'uniformoutput', false);
-    pnsChans = strmatch('PNS', allTypes, 'exact')';
+    pnsChans = strmatch('pns', lower(allTypes), 'exact')';
 else
     pnsChans = [];
 end
