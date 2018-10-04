@@ -82,7 +82,11 @@ for iType = 1:length(uniqueType)
         segmentObj.setBeginTime(  round((epoch-1)*EEG.pnts/round(EEG.srate)*1000000) );
         segmentObj.setEndTime(    round((epoch  )*EEG.pnts/round(EEG.srate)*1000000) );
         segmentObj.setEventBegin( round((events(trials(iTrial)).latency-1)/round(EEG.srate)*1000000) );
-        segmentObj.setEventEnd(   round((events(trials(iTrial)).latency-1+events(trials(iTrial)).duration)/round(EEG.srate)*1000000) );
+        if isfield(events(trials(iTrial)), 'duration') && ~isempty(events(trials(iTrial)).duration)
+             duration = events(trials(iTrial)).duration;
+        else duration = 0;
+        end
+        segmentObj.setEventEnd(   round((events(trials(iTrial)).latency-1+duration)/round(EEG.srate)*1000000) );
         if isfield(events, 'status')
             segmentObj.setStatus(  events(trials(iTrial)).status );
         end
