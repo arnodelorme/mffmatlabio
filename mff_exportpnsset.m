@@ -29,7 +29,7 @@ if isempty(EEG.chanlocs), return; end
 if ~isfield(EEG.chanlocs, 'type'), return; end
 allTypes = { EEG.chanlocs.type };
 allTypes = cellfun(@(x)num2str(x), allTypes, 'uniformoutput', false);
-pnsChans = strmatch('PNS', allTypes, 'exact')';
+pnsChans = strmatch('pns', lower(allTypes), 'exact')';
 if isempty(pnsChans), return; end
 
 p = fileparts(which('mff_importsignal.m'));
@@ -60,6 +60,7 @@ if ~isempty(pnsChans)
     for iChan = 1:length(pnsChans)
         sensorObj = javaObject('com.egi.services.mff.api.PNSSensor');
         sensorObj.setName(EEG.chanlocs(pnsChans(iChan)).labels);
+        sensorObj.setNumber(iChan);
         jList.add(sensorObj);
     end
 
