@@ -34,7 +34,7 @@ warning('on', 'MATLAB:Java:DuplicateClass');
 if ~isempty(EEG.chanlocs) && isfield(EEG.chanlocs, 'type')
     allTypes = { EEG.chanlocs.type };
     allTypes = cellfun(@(x)num2str(x), allTypes, 'uniformoutput', false);
-    pnsChans = strmatch('PNS', allTypes, 'exact')';
+    pnsChans = strmatch('pns', lower(allTypes), 'exact')';
     EEG.chanlocs(pnsChans) = [];
 end
 
@@ -66,6 +66,13 @@ layoutObj = javaObject('com.egi.services.mff.api.SensorLayout');
 layoutObj.setName('Exported from EEGLAB');
 
 jList = javaObject('java.util.ArrayList');
+
+% average radius is 10 in sherical coordiantes
+if ~isempty(chanlocs(iSensor).X)
+    averageRadius = mean( [ EEG.chanlocs.sph_radius ]);
+    if round(averageRadius) == 10, averageRadius = 10; end
+end
+
 for iSensor = 1:length(chanlocs)
     sensorObj = javaObject('com.egi.services.mff.api.Sensor');
     
@@ -75,9 +82,11 @@ for iSensor = 1:length(chanlocs)
     else
         sensorObj.setName(chanlocs(iSensor).labels);
     end
-    sensorObj.setX(chanlocs(iSensor).X);
-    sensorObj.setY(chanlocs(iSensor).Y);
-    sensorObj.setZ(chanlocs(iSensor).Z);
+    if ~isempty(chanlocs(iSensor).X)
+        sensorObj.setX(chanlocs(iSensor).X*10/averageRadius); % assumes 0,0,0 at the center of the head
+        sensorObj.setY(chanlocs(iSensor).Y*10/averageRadius);
+        sensorObj.setZ(chanlocs(iSensor).Z*10/averageRadius);
+    end
     if isfield(chanlocs, 'identifier') && ~isempty(chanlocs(iSensor).identifier) && (chanlocs(iSensor).identifier ~= 0)
         sensorObj.setIdentifier(chanlocs(iSensor).identifier);
     end
