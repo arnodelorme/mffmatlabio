@@ -138,11 +138,6 @@ EEG.etc.subject    = subject;
 if iscell(EEG.ref)
     EEG.ref = sprintf('%s ', EEG.ref{:});
 end
-if exist('pop_chanedit', 'file')
-    EEG=pop_chanedit(EEG, 'forcelocs',[],'nosedir','+Y');
-else
-    EEG.chaninfo.nosedir = '+Y';
-end
 EEG.urchanlocs = EEG.chanlocs;
 pnschans                = mff_importpnsset(mffFile);
 if length(pnschans) ~= npns && ~(length(pnschans) == size(EEG.data,1) && isempty(EEG.chanlocs))
@@ -151,6 +146,7 @@ end
 if ~isempty(EEG.chanlocs)
     if exist('eeg_checkchanlocs.m', 'file')
         EEG = eeg_checkchanlocs(EEG); % put fiducials in chanfinfo
+        nChannels = length(EEG.chanlocs);
     end
 end
 if ~isempty(pnschans)
@@ -159,16 +155,21 @@ if ~isempty(pnschans)
         EEG.chanlocs = pnschans;
     else
         if isempty(EEG.chanlocs)
-            for iChan = 1:nChannels-npns
-                EEG.chanlocs(iChan).labels = [ 'E' num2str(iChan) ];
-                EEG.chanlocs(iChan).type   = 'EEG';
+            for iChan = 1:nChannels
+                EEG.chanlocs(end+1).labels = [ 'E' num2str(iChan) ];
+                EEG.chanlocs(end  ).type   = 'EEG';
             end
         end
         for iChan = 1:npns
-            EEG.chanlocs(nChannels-npns+iChan).labels = pnschans(iChan).labels;
-            EEG.chanlocs(nChannels-npns+iChan).type   = pnschans(iChan).type;
+            EEG.chanlocs(end+1).labels = pnschans(iChan).labels;
+            EEG.chanlocs(end  ).type   = pnschans(iChan).type;
         end
     end
+end
+if exist('pop_chanedit', 'file')
+    EEG=pop_chanedit(EEG, 'forcelocs',[],'nosedir','+Y');
+else
+    EEG.chaninfo.nosedir = '+Y';
 end
 
 EEG.etc.recordingtime = begtime;
