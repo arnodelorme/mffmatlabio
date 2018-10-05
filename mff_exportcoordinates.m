@@ -30,6 +30,9 @@ warning('off', 'MATLAB:Java:DuplicateClass');
 javaaddpath(fullfile(p, 'MFF-1.2.2-jar-with-dependencies.jar'));
 warning('on', 'MATLAB:Java:DuplicateClass');
 
+% rotate back (need all the channels)
+EEG=pop_chanedit(EEG, 'forcelocs',[],'nosedir','-Y');
+
 % remove PNS channels
 if ~isempty(EEG.chanlocs) && isfield(EEG.chanlocs, 'type')
     allTypes = { EEG.chanlocs.type };
@@ -41,7 +44,6 @@ end
 if isempty(EEG.chanlocs) || ~isfield(EEG.chanlocs(1), 'X') || isempty(EEG.chanlocs(1).X)
     return;
 end
-EEG=pop_chanedit(EEG, 'forcelocs',[],'nosedir','-Y');
 [~, ~, chanlocs]= eeg_checkchanlocs( EEG.chanlocs, EEG.chaninfo);
 
 % create a factory
@@ -68,9 +70,9 @@ layoutObj.setName('Exported from EEGLAB');
 jList = javaObject('java.util.ArrayList');
 
 % average radius is 10 in sherical coordiantes
-if ~isempty(chanlocs(iSensor).X)
+if ~isempty(chanlocs(1).X)
     averageRadius = mean( [ EEG.chanlocs.sph_radius ]);
-    if round(averageRadius) == 10, averageRadius = 10; end
+    if abs(averageRadius -10) < 2, averageRadius = 10; end
 end
 
 for iSensor = 1:length(chanlocs)
