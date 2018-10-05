@@ -40,6 +40,12 @@ Revision history
 Version 2.00
 - Octave compatibility
 - Fix issue with boundary latency when importing file mff version 0
+- Allowing to export random EEG files
+- Rescale coordinates for non-MFF channel coordinates
+- Allow exporting datasets which do not have a code field
+- Allow exporting datasets with no event duration
+- Better support for PNS channels for File-IO
+- Fix command line call not rotating channels
 
 Version 1.00
 - Add file separator to EEGLAB export menu
