@@ -111,7 +111,7 @@ datasetsToLoad = 1:length(inputFilenames); % dataset 16 POTENTIAL PROBLEM
 % end
 % return
 
-for iFile = datasetsToLoad %datasetsToLoad %1 %[20 23] %1:length(datasetsToLoad)
+for iFile = 10 %datasetsToLoad %datasetsToLoad %1 %[20 23] %1:length(datasetsToLoad)
     errorMsg = '';
     
     fprintf('Reading file %s\n', inputFilenames{iFile});

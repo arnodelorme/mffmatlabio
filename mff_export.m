@@ -44,7 +44,10 @@ end
 mff_createmff(outputFile);
 mff_exportinfo(EEG, outputFile);
 mff_exportsubject(EEG, outputFile);
-mff_exportinfon(EEG, outputFile);
+mff_exportinfon(EEG, outputFile,1);
+if isfield(EEG.etc, 'info2')
+    mff_exportinfon(EEG, outputFile, 2);
+end
 mff_exportsignal(EEG, outputFile);
 indtle = mff_exportcategories(EEG, outputFile);
 EEG.event(indtle) = []; % remove time locking events

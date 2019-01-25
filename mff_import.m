@@ -3,7 +3,7 @@
 %                 events, channels and channel coordinates.
 %
 % Usage:
-%   mff_import(EEG, mffFile);
+%   EEG = mff_import(mffFile);
 %
 % Input:
 %  mffFile - filename/foldername for the MFF file (MFF file/folder must
@@ -113,15 +113,26 @@ if exist('eeg_checkset.m', 'file')
 end
 
 % scale signal with calibration values if necessary
-infon = mff_importinfon(mffFile);
-if isfield(infon, 'calibration')
+info1 = mff_importinfon(mffFile, 1);
+info2 = mff_importinfon(mffFile, 2);
+if isfield(info1, 'calibration')
     disp('Calibrating data...');
-    for iChan = 1:length(infon.calibration)
-        floatData(iChan,:,:) = floatData(iChan,:,:)*infon.calibration(iChan);
+    for iChan = 1:length(info1.calibration)
+        floatData(iChan,:,:) = floatData(iChan,:,:)*info1.calibration(iChan);
     end
 end
-infon.calibration = [];
-EEG.etc.infon = infon;
+if isfield(info2, 'calibration')
+    disp('Calibrating data...');
+    for iChan = 1:length(info2.calibration)
+        floatData(end-length(info2.calibration)+iChan,:,:) = floatData(end-length(info2.calibration)+iChan,:,:)*info2.calibration(iChan);
+    end
+end
+info1.calibration = [];
+info2.calibration = [];
+EEG.etc.info1 = info1;
+if ~isempty(info2)
+    EEG.etc.info2 = info2;
+end
 
 % import info file
 info    = mff_importinfo(mffFile);

@@ -57,8 +57,10 @@ if EEG.trials == 1
         samples       = [ EEG.event(boundaryEvent).latency ];
     end
     samples = [ 0 samples EEG.pnts ];
-    if isfield(EEG.event, 'duration')
-        durations = [ EEG.event(boundaryEvent).duration ];
+    if isfield(EEG.event, 'duration') && ~isempty(boundaryEvent)
+        durations = { EEG.event(boundaryEvent).duration };
+        durations(cellfun(@isempty,durations)) = { 0 };
+        durations = [ durations{:} ];
         durations = cumsum(durations);
         durations = [0 durations durations(end) ];
     else
