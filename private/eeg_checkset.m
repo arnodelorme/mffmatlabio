@@ -232,7 +232,8 @@ end;
 % reading these option take time because
 % of disk access
 % --------------
-eeglab_options;
+% eeglab_options;
+eeg_optionsbackup;
 
 % standard checking
 % -----------------
@@ -250,36 +251,36 @@ for inddataset = 1:length(ALLEEG)
                 case 'data',; % already done at the top
                 case 'contdata',;
                     if EEG.trials > 1
-                        errordlg2(strvcat('Error: function only works on continuous data'), 'Error');
+                        disp(strvcat('Error: function only works on continuous data'), 'Error');
                         return;
                     end;
                 case 'ica',
                     if isempty(EEG.icaweights)
-                        errordlg2(strvcat('Error: no ICA decomposition. use menu "Tools > Run ICA" first.'), 'Error');
+                        disp(strvcat('Error: no ICA decomposition. use menu "Tools > Run ICA" first.'), 'Error');
                         return;
                     end;
                 case 'epoch',
                     if EEG.trials == 1
-                        errordlg2(strvcat('Extract epochs before running that function', 'Use Tools > Extract epochs'), 'Error');
+                        disp(strvcat('Extract epochs before running that function', 'Use Tools > Extract epochs'), 'Error');
                         return
                     end;
                 case 'besa',
                     if ~isfield(EEG, 'sources')
-                        errordlg2(strvcat('No dipole information', '1) Export component maps: Tools > Localize ... BESA > Export ...' ...
+                        disp(strvcat('No dipole information', '1) Export component maps: Tools > Localize ... BESA > Export ...' ...
                             , '2) Run BESA to localize the equivalent dipoles', ...
                             '3) Import the BESA dipoles: Tools > Localize ... BESA > Import ...'), 'Error');
                         return
                     end;
                 case 'event',
                     if isempty(EEG.event)
-                        errordlg2(strvcat('Requires events. You need to add events first.', ...
+                        disp(strvcat('Requires events. You need to add events first.', ...
                             'Use "File > Import event info" or "File > Import epoch info"'), 'Error');
                         return;
                     end;
                 case 'chanloc',
                     tmplocs = EEG.chanlocs;
                     if isempty(tmplocs) || ~isfield(tmplocs, 'theta') || all(cellfun('isempty', { tmplocs.theta }))
-                        errordlg2( strvcat('This functionality requires channel location information.', ...
+                        disp( strvcat('This functionality requires channel location information.', ...
                             'Enter the channel file name via "Edit > Edit dataset info".', ...
                             'For channel file format, see ''>> help readlocs'' from the command line.'), 'Error');
                         return;
@@ -287,7 +288,7 @@ for inddataset = 1:length(ALLEEG)
                 case 'chanlocs_homogeneous',
                     tmplocs = EEG.chanlocs;
 	                if isempty(tmplocs) || ~isfield(tmplocs, 'theta') || all(cellfun('isempty', { tmplocs.theta }))
-                        errordlg2( strvcat('This functionality requires channel location information.', ...
+                        disp( strvcat('This functionality requires channel location information.', ...
                             'Enter the channel file name via "Edit > Edit dataset info".', ...
                             'For channel file format, see ''>> help readlocs'' from the command line.'), 'Error');
                         return;
@@ -641,7 +642,7 @@ for inddataset = 1:length(ALLEEG)
                             end
                         end;
                     catch, 
-                        errordlg2(['Warning: minor problem encountered when generating' 10 ...
+                        disp(['Warning: minor problem encountered when generating' 10 ...
                             'the EEG.epoch structure (used only in user scripts)']); return;
                     end;
                 case { 'loaddata' 'savedata' 'chanconsist' 'icaconsist' 'epochconsist' }, res = '';
@@ -1250,14 +1251,14 @@ for inddataset = 1:length(ALLEEG)
     if ~isfield(EEG.reject, 'rejglobal')        EEG.reject.rejglobal  = []; res = com; end;
     if ~isfield(EEG.reject, 'rejglobalE')       EEG.reject.rejglobalE = []; res = com; end;
     
-    % track version of EEGLAB
-    % -----------------------
-    tmpvers = eeg_getversion;
-    if ~isfield(EEG.etc, 'eeglabvers') || ~isequal(EEG.etc.eeglabvers, tmpvers)
-        EEG.etc.eeglabvers = tmpvers;
-        EEG = eeg_hist( EEG, ['EEG.etc.eeglabvers = ''' tmpvers '''; % this tracks which version of EEGLAB is being used, you may ignore it'] );
-        res = com;
-    end;
+%     % track version of EEGLAB
+%     % -----------------------
+%     tmpvers = eeg_getversion;
+%     if ~isfield(EEG.etc, 'eeglabvers') || ~isequal(EEG.etc.eeglabvers, tmpvers)
+%         EEG.etc.eeglabvers = tmpvers;
+%         EEG = eeg_hist( EEG, ['EEG.etc.eeglabvers = ''' tmpvers '''; % this tracks which version of EEGLAB is being used, you may ignore it'] );
+%         res = com;
+%     end;
     
     % default colors for rejection
     % ----------------------------
