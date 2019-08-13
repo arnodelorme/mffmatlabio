@@ -85,30 +85,35 @@ end
 
 % Use different event fields to populate the EEGLAB type field
 % ------------------------------------------------------------
-if ~isempty(typefield) || ~(ischar(typefield) && strcmpi(typefield, 'code'))
-    if ischar(typefield), typefield = { typefield }; end
-    
-    % get data for each MFF event field
-    dataField = cell(length(EEG.event), length(typefield));
-    for iField = 1:length(typefield)
-        dataField(:,iField) = { EEG.event.(typefield{iField}) }';
-    end
-    
-    % copy the data into EEGLAB event structure
-    strField = cell(1,length(typefield));
-    strField(:) = {'_'}; % add space between events
-    for iEvent = 1:length(EEG.event)
-        if ~isequal(lower(EEG.event(iEvent).type), 'boundary') % not a boundary
-            if ~all(cellfun(@isempty, dataField(iEvent,:))) % not a trial type
-                tmpType = [ dataField(iEvent,:); strField ];
-                tmpType = [ tmpType{:} ];
-                tmpType(end) = [];
-                EEG.event(iEvent).type = tmpType;
+if exist('typefield', 'var')
+    if ~isempty(typefield) || ~(ischar(typefield) && strcmpi(typefield, 'code'))
+        if ischar(typefield), typefield = { typefield }; end
+        
+        % get data for each MFF event field
+        dataField = cell(length(EEG.event), length(typefield));
+        for iField = 1:length(typefield)
+            dataField(:,iField) = { EEG.event.(typefield{iField}) }';
+        end
+        
+        % copy the data into EEGLAB event structure
+        strField = cell(1,length(typefield));
+        strField(:) = {'_'}; % add space between events
+        for iEvent = 1:length(EEG.event)
+            if ~isequal(lower(EEG.event(iEvent).type), 'boundary') % not a boundary
+                if ~all(cellfun(@isempty, dataField(iEvent,:))) % not a trial type
+                    tmpType = [ dataField(iEvent,:); strField ];
+                    tmpType = [ tmpType{:} ];
+                    tmpType(end) = [];
+                    EEG.event(iEvent).type = tmpType;
+                end
             end
         end
     end
 end
 EEG = eeg_checkset(EEG,'eventconsistency');
 
-com = sprintf('EEG = pop_mffimport(''%s'', %s);', fileName, vararg2str({typefield}));
-
+% com = sprintf('EEG = pop_mffimport(''%s'', %s);', fileName, vararg2str({typefield}));
+com = sprintf('EEG = pop_mffimport(''%s''', fileName);
+if exist('typefield', 'var'), com = sprintf([com  ',%s'],vararg2str({typefield})); end
+com = [com ');'];
+end
