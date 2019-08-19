@@ -37,6 +37,10 @@ Known limitations to the Philips MFF import/export plugin
 
 Revision history
 ----------------
+Version 2.02
+- Adding eeg_checkset to private folder to run in standalone mode (F. Tadel)
+- Added fix for files with no events (R. Martinez fix for https://github.com/sccn/eeglab/issues/17)
+
 Version 2.01
 - Allow eegplugin_mffmatlabio to return version number
 - Remove call in mff_import that was assuming EEGLAB was present
