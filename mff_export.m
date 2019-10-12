@@ -42,6 +42,10 @@ if exist(outputFile)
 end
 
 mff_createmff(outputFile);
+if ~isfield(EEG.etc, 'recordingtime')
+    EEG.etc.recordingtime = now;
+    EEG.etc.timezone = '00:00';
+end
 mff_exportinfo(EEG, outputFile);
 mff_exportsubject(EEG, outputFile);
 mff_exportinfon(EEG, outputFile,1);
