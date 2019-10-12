@@ -52,7 +52,6 @@ else
 end
 info.setInfoNFileType(tmp);
 if isfield(EEG.etc, infon )
-    info.setInfoNFileTypeInformation(tmp2);
     if isfield(EEG.etc.(infon), 'infoNFileTypeInformation')
         tmpInfo = EEG.etc.(infon).infoNFileTypeInformation;
         if isfield(tmpInfo, 'montageName'), tmp2.setMontageName(tmpInfo.montageName); end
@@ -63,8 +62,11 @@ if isfield(EEG.etc, infon )
         if index == 1
             tmp2.setMontageName('EEGLAB exported montage');
         else
-            tmp2.setPNSName('EEGLAB exported PNS channels');
+            tmp2.setPNSSetName('EEGLAB exported PNS channels');
         end
     end
+else
+    tmp2.setMontageName('EEGLAB exported montage');
 end
+info.setInfoNFileTypeInformation(tmp2);
 info.saveResource();
