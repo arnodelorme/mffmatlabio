@@ -226,7 +226,7 @@ if ~isempty(cat)
         [catContTmp.name] = deal(cat(iCat).name);
         catCont = [ catCont catContTmp ];
     end
-    [tmp indices] = sort([catCont.begintime]);
+    [tmp, indices] = sort([catCont.begintime]);
     catCont = catCont(indices);
     
     for iBound = 1:length(cont) % do not add first event
@@ -255,8 +255,13 @@ if ~isempty(cat)
         EEG.event(end).latency  = -EEG.xmin*EEG.srate+1+EEG.pnts*(iBound-1);
         EEG.event(end).duration = (trial.eventend-trial.eventbegin)/1000000*EEG.srate; % this is sometimes off by 1e-13
 
-        EEG.event(end).status   = trial.status;
         EEG.event(end).epoch    = iBound;
+        
+        % copy other fields
+        trialFields = setdiff(fields(trial), { 'name', 'begintime', 'endtime', 'eventbegin', 'eventend' });
+        for iField = 1:length(trialFields)
+            EEG.event(end).(trialFields{iField}) = trial.(trialFields{iField});
+        end
 
         cont(iBound).samplebeg = cont(iBound).begintime/1000000*EEG.srate;
         cont(iBound).sampleend = cont(iBound).endtime/1000000*EEG.srate;
@@ -322,7 +327,7 @@ if ~isempty(EEG.event)
     if any(cellfun(@isempty, { EEG.event.latency }))
         error('Some empty event latency')
     end
-    [tmp,iEvent] = sort([EEG.event.latency]);
+    [~,iEvent] = sort([EEG.event.latency]);
     EEG.event = EEG.event(iEvent);
     
     % remove duration of remove data portions from events

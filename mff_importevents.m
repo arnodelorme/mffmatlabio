@@ -103,30 +103,7 @@ for iEvent = 1:length(eventFile)
                 
                 % import keys
                 keylist = eventObj.getKeys();
-                events(eventCount).mffkeys = char(keylist);
-                eventkeycount = keylist.size;
-                keyVals = [];
-                for q = 0:eventkeycount-1
-                    theKey = keylist.get(q);
-                    keyVals(q+1).code = char(theKey.getCode);
-                    keyVals(q+1).data = char(theKey.getData);
-                    keyVals(q+1).datatype = char(theKey.getDataType);
-                    keyVals(q+1).description = char(theKey.getDescription);
-                    cleancode = keyVals(q+1).code;
-                    cleancode( cleancode < 48 ) = []; % invalid char
-                    cleancode( cleancode > 57 & cleancode < 64 ) = []; % invalid char
-                    try
-                        events(eventCount).( [ 'mffkey_' cleancode ]) = keyVals(q+1).data;
-                    catch
-                        if showWarning
-                            disp('Warning: issue when converting MFF event key ************');
-                            showWarning = false;
-                        end
-                    end
-                end
-                if eeglabExport
-                    events(eventCount).mffkeysbackup = vararg2str(keyVals); % for exporting
-                end
+                events = mff_importkeys(events, eventCount, keylist, eeglabExport);
                 
                 eventCount = eventCount+1;
                 
