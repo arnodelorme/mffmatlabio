@@ -49,9 +49,15 @@ if ~isempty(info) && exist(fullfile(mffFile, [infon  '.xml']))
         
         tmp = info.getInfoNFileTypeInformation;
         try
-            infoN.infoNFileTypeInformation.montageName      = char(tmp.getMontageName);
-            infoN.infoNFileTypeInformation.sensorLayoutName = char(tmp.getSensorLayoutName);
-            infoN.infoNFileTypeInformation.referenceScheme  = char(tmp.getReferenceScheme);
+            if ~isempty(char(tmp.getMontageName))
+                infoN.infoNFileTypeInformation.montageName      = char(tmp.getMontageName);
+            end
+            if ~isempty(char(tmp.getSensorLayoutName))
+                infoN.infoNFileTypeInformation.sensorLayoutName = char(tmp.getSensorLayoutName);
+            end
+            if ~isempty(char(tmp.referenceScheme))
+                infoN.infoNFileTypeInformation.referenceScheme  = char(tmp.getReferenceScheme);
+            end
         catch
         end
         try
