@@ -61,3 +61,4 @@ mff_exportsensorlayout(EEG, outputFile);
 mff_exportpnsset(EEG, outputFile);
 mff_exportepochs(EEG, outputFile);
 mff_exportsensorlayout(EEG, outputFile);
+disp('Done');
