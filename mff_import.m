@@ -130,8 +130,8 @@ end
 info1.calibration = [];
 info2.calibration = [];
 EEG.etc.info1 = info1;
-if ~isempty(info2)
-    EEG.etc.info2 = info2;
+if ~isempty(info2) && length(fieldnames(info2)) > 1 
+    EEG.etc.info2 = info2; % more than just calibration
 end
 
 % import info file
@@ -152,7 +152,12 @@ end
 EEG.urchanlocs = EEG.chanlocs;
 pnschans                = mff_importpnsset(mffFile);
 if length(pnschans) ~= npns && ~(length(pnschans) == size(EEG.data,1) && isempty(EEG.chanlocs))
-    error('Number of PNS raw data channels is not equal to number of PNS channels'); 
+    if length(pnschans) == npns+1
+        % last PNS status channel missing because blank and removed by mff_importsignal
+        pnschans(end) = [];
+    else
+        error('Number of PNS raw data channels is not equal to number of PNS channels');
+    end
 end
 if ~isempty(EEG.chanlocs)
     if exist('eeg_checkchanlocs.m', 'file')
@@ -320,6 +325,8 @@ else
 %            EEG.event(end).latency  = sampleCalculated;
         end
     end
+    
+    % rename Break cnt events
 end
 
 %% resort events and check event structure
