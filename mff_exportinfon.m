@@ -43,13 +43,22 @@ else
 end
 
 info = mfffactory.openResourceAtURI( fullfile(mffFile, [infon  '.xml']), infoType);
-if index == 1
+
+% set file type 1 or 2
+tmpInfo = [];
+if isfield(EEG.etc, infon )
+    if isfield(EEG.etc.(infon), 'infoNFileTypeInformation')
+        tmpInfo = EEG.etc.(infon).infoNFileTypeInformation;
+    end
+end
+if index == 1 && ~isfield(tmpInfo, 'pnsSetName')
     tmp = javaMethod('valueOf', 'com.egi.services.mff.api.InfoN$InfoNFileType', 'kEEG');
     tmp2 = javaObject('com.egi.services.mff.api.InfoNFileTypeEEG');
 else
     tmp = javaMethod('valueOf', 'com.egi.services.mff.api.InfoN$InfoNFileType', 'kPNSData');
     tmp2 = javaObject('com.egi.services.mff.api.InfoNFileTypePNSData');
 end
+
 info.setInfoNFileType(tmp);
 if isfield(EEG.etc, infon )
     if isfield(EEG.etc.(infon), 'infoNFileTypeInformation')

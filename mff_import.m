@@ -229,7 +229,16 @@ if ~isempty(cat)
     for iCat = 1:length(cat)
         catContTmp = cat(iCat).trials;
         [catContTmp.name] = deal(cat(iCat).name);
-        catCont = [ catCont catContTmp ];
+        try
+            catCont = [ catCont catContTmp ];
+        catch
+            fieldsTmp = fieldnames(catContTmp);
+            for iCount = 1:length(catContTmp)
+                for iField = 1:length(fieldsTmp)
+                    catCont(end+1).(fieldsTmp{iField}) = catContTmp(iCount).(fieldsTmp{iField});
+                end
+            end
+        end
     end
     [tmp, indices] = sort([catCont.begintime]);
     catCont = catCont(indices);
@@ -361,4 +370,9 @@ data = EEG.data;
 events = EEG.event;
 chanlocs = EEG.chanlocs;
 mff = EEG.etc;
-EEG.trials=size(EEG.data,2)/EEG.pnts;
+try
+    EEG = eeg_checkset(EEG); 
+catch
+    EEG.pnts   = size(EEG.data,2);
+    EEG.trials = size(EEG.data,3);
+end

@@ -38,6 +38,10 @@ mfffactorydelegate = javaObject('com.egi.services.mff.api.LocalMFFFactoryDelegat
 mfffactory         = javaObject('com.egi.services.mff.api.MFFFactory', mfffactorydelegate);
 
 infotype = javaObject('com.egi.services.mff.api.MFFResourceType', javaMethod('valueOf', 'com.egi.services.mff.api.MFFResourceType$MFFResourceTypes', 'kMFF_RT_InfoN'));
+
+if exist(fullfile(mffFile, [infon  '.xml']))
+    check_rewrite_file( fullfile(mffFile, [infon  '.xml']) );
+end
 info = mfffactory.openResourceAtURI( fullfile(mffFile, [infon  '.xml']), infotype);
 
 infoN = [];
@@ -94,3 +98,32 @@ if ~isempty(info) && exist(fullfile(mffFile, [infon  '.xml']))
 end
 
 mfffactory.closeResource(info);
+
+% rewrite info file for for hardware filter issue in Java library
+function check_rewrite_file( fileName )
+
+fid = fopen(fileName, 'r');
+txt = {};
+modified = false;
+while ~feof(fid)
+    txt{end+1} = fgetl(fid);
+    posStr = strfind(txt{end}, 'd">true');
+    if ~isempty(posStr)
+        modified = true;
+        txt{end}(posStr) = [];
+    end
+end
+fclose(fid);
+
+if modified
+    fid = fopen(fileName, 'w');
+    if fid == -1
+        error('Cannot modify original file to make it compatible with Java import librairy');
+    end
+    for iTxt = 1:length(txt)
+        fprintf(fid, '%s\n', txt{iTxt});
+    end
+    fclose(fid);
+end
+    
+

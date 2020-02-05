@@ -81,7 +81,9 @@ for iEvent = 1:length(events)
         
         if isfield(events, 'mffkeysbackup') && ~isempty(events(iEvent).mffkeysbackup)
             jListKeys = javaObject('java.util.ArrayList');
-            tmpKeys = eval(events(iEvent).mffkeysbackup);
+            tmpmffkeysbackup = events(iEvent).mffkeysbackup;
+            tmpmffkeysbackup(tmpmffkeysbackup == 10) = ' '; % remove carriage return
+            tmpKeys = eval(tmpmffkeysbackup);
             for iKey = 1:length(tmpKeys);
                 keyObj = javaObject('com.egi.services.mff.api.Key');
                 keyObj.setCode(tmpKeys(iKey).code);

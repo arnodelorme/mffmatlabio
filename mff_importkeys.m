@@ -35,6 +35,9 @@ if nargin < 4
     eeglabExport = true;
 end
 
+if isempty(keylist)
+    return
+end
 eventkeycount = keylist.size;
 events(eventCount).mffkeys = char(keylist);
 

@@ -94,17 +94,19 @@ for iType = 1:length(uniqueType)
             % if additional keys are present -> average (not sure this heuristic is always correct)
             segmentObj.setName( 'Average' );
             
-            jListKeys = javaObject('java.util.ArrayList');
-            tmpKeys = eval(events(trials(iTrial)).mffkeysbackup);
-            for iKey = 1:length(tmpKeys);
-                keyObj = javaObject('com.egi.services.mff.api.Key');
-                keyObj.setCode(tmpKeys(iKey).code);
-                keyObj.setData(tmpKeys(iKey).data);
-                keyObj.setDataType(tmpKeys(iKey).datatype);
-                keyObj.setDescription(tmpKeys(iKey).description);
-                jListKeys.add(keyObj);
+            if ~isempty(events(trials(iTrial)).mffkeysbackup)
+                jListKeys = javaObject('java.util.ArrayList');
+                tmpKeys = eval(events(trials(iTrial)).mffkeysbackup);
+                for iKey = 1:length(tmpKeys);
+                    keyObj = javaObject('com.egi.services.mff.api.Key');
+                    keyObj.setCode(tmpKeys(iKey).code);
+                    keyObj.setData(tmpKeys(iKey).data);
+                    keyObj.setDataType(tmpKeys(iKey).datatype);
+                    keyObj.setDescription(tmpKeys(iKey).description);
+                    jListKeys.add(keyObj);
+                end
+                segmentObj.setKeys(jListKeys);
             end
-            segmentObj.setKeys(jListKeys);
         end
         
         % check epoch length

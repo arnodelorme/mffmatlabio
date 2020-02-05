@@ -37,6 +37,11 @@ Known limitations to the Philips MFF import/export plugin
 
 Revision history
 ----------------
+Version 3.0
+- Fix issue with PNS channels
+- Fix imporing rare files with custom fields
+- Fixing a variety of minor Git issues
+
 Version 2.02
 - Adding eeg_checkset to private folder to run in standalone mode (F. Tadel)
 - Added fix for files with no events (R. Martinez fix for https://github.com/sccn/eeglab/issues/17)
