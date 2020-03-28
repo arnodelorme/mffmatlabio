@@ -42,6 +42,9 @@ if ~strcmpi(testtarget, 'matlab') && ~strcmpi(testtarget, 'fileio')
 end
 
 inputFilenames = [];
+inputFilenames(end+1).file = 'MFF_Files/Bugs/RHYM_MFF_issue19/AA_1756.mff';
+inputFilenames(end+1).file = 'MFF_Files/Bugs/RHYM_MFF_issue19/AA_1845.mff';
+
 inputFilenames(end+1).file = 'MFF_Files/Unprocessed Continuous/32 channels/NIA_333ms_HCGSN32_test01.mff';
 inputFilenames(end+1).file = 'MFF_Files/Unprocessed Continuous/128 channels/GNG2_002_1v_cln.nsf.mff';
 inputFilenames(end+1).file = 'MFF_Files/Unprocessed Continuous/256 channels/VTD_993.1.ses.mff';

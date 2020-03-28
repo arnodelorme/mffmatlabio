@@ -1,4 +1,4 @@
-Known limitations to the Philips MFF import/export plugin
+# Known limitations to the Philips MFF import/export plugin
 ---------------------------------------------------------
 - Timing accuracy limited to 10-50 microseconds precision. Matlab 2014b time 
   conversion is not as precise as Matlab 2017a conversion (we can loose 1ms 
@@ -35,8 +35,12 @@ Known limitations to the Philips MFF import/export plugin
   Although we do not expect big-endian to be a problem, there is a small
   chance there could be problem
 
-Revision history
+# Revision history
 ----------------
+Version 3.1
+- Implement auto-save for BIDS
+- Fix event track type for segmenting in Netstation
+
 Version 3.0
 - Fix issue with PNS channels
 - Fix imporing rare files with custom fields
