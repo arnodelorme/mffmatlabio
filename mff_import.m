@@ -77,8 +77,8 @@ end
 mffPath = fileparts(mffFile);
 if isempty(mffPath)
     mffFile = fullfile(pwd, mffFile);
-else
-    disp('Make sure you call this function with the full MFF ressource path name ******');
+elseif exist(fullfile(pwd, mffFile))
+    mffFile = fullfile(pwd, mffFile);
 end
 
 % import data
@@ -113,6 +113,7 @@ if exist('eeg_checkset.m', 'file')
 end
 
 % scale signal with calibration values if necessary
+disp('Make sure you to use the MFF ressource path name not the relative path (crash often related to that issue) ******');
 info1 = mff_importinfon(mffFile, 1);
 info2 = mff_importinfon(mffFile, 2);
 if isfield(info1, 'calibration')
