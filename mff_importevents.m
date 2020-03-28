@@ -61,6 +61,8 @@ for iEvent = 1:length(eventFile)
     
     if eventtrackObj.loadResource()
         
+        name      = eventtrackObj.getName();
+        trackType = eventtrackObj.getTrackType();
         eventlist = eventtrackObj.getEvents();
         nevents = eventlist.size();
         fprintf('Importing %d events from file %s...\n', nevents, eventFile(iEvent).name);
@@ -90,6 +92,8 @@ for iEvent = 1:length(eventFile)
                 events(eventCount).label        = char(eventObj.getLabel());
                 events(eventCount).relativebegintime = eventObj.getRelativeBeginTime();
                 events(eventCount).sourcedevice = char(eventObj.getSourceDevice());
+                events(eventCount).name         = char(name);
+                events(eventCount).tracktype    = char(trackType);
                 
                 % compute latency in days with ms -> convert to samples
                 % eventCount = 1; 
