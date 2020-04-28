@@ -361,7 +361,7 @@ if ~isempty(EEG.event)
     % data trials
     s = dbstack;
     if length(s) <= 1 || ~strcmpi(s(2).file, 'pop_mffimport.m')
-        if exist('eeg_checkset.m', 'file')
+        if exist('eeg_checkset.m', 'file') && exist('eeglab_options.m', 'file')
             EEG = eeg_checkset(EEG,'eventconsistency');
         end
     end
