@@ -52,6 +52,7 @@ epochResource = mfffactorydelegate.openResourceAtURI(catURI, epochsRType);
 durations = [];
 if EEG.trials == 1
     samples = [];
+    boundaryEvent = [];
     if ~isempty(EEG.event) && isfield(EEG.event, 'type') && isstr(EEG.event(1).type)
         boundaryEvent = strmatch( 'boundary', { EEG.event.type }, 'exact');
         samples       = [ EEG.event(boundaryEvent).latency ];

@@ -110,6 +110,8 @@ inputFilenames(end+1).file = 'MFF_Files/Bugs/Priefer_AV1_AV_import_export_issue_
 inputFilenames(end+1).file = 'MFF_Files/Bugs/SPBI023_20150414_1357.mff';
 inputFilenames(end+1).file = 'MFF_Files/Bugs/trevor/SSDE_P004_RSEEG_EO_BS_20180922_042706.mff';
 inputFilenames(end+1).file = 'MFF_Files/Bugs/zhaodi.mff';
+inputFilenames(end+1).file = 'MFF_Files/Bugs/issue21/EEG_VisualMotor_Run01.mff';
+inputFilenames(end+1).file = 'MFF_Files/Bugs/issue22/CNTL001_P50Sup_T1_20150608_1530.mff'; inputFilenames(end).info = 'Differences checked and OK - reference renamed for some reason';
 
 %%
 ALLEEG = [];
@@ -124,7 +126,7 @@ datasetsToLoad = 1:length(inputFilenames); % dataset 16 POTENTIAL PROBLEM
 % end
 % return
 
-for iFile = 1:length(datasetsToLoad)
+for iFile = length(datasetsToLoad)
     errorMsg = '';
     
     fprintf('Reading file %s\n', inputFilenames(iFile).file);

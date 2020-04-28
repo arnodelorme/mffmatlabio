@@ -55,12 +55,13 @@ if nargin < 1
     % pop up window
     % -------------
     if ismac
-        [fileName, filePath] = uigetfile('*', 'Select an EGI .mff file/folder', 'MultiSelect', 'on');
+        [fileName, filePath] = uigetfile('*', 'Select an EGI .mff file(s)', 'MultiSelect', 'on');
         if isnumeric(fileName) && fileName(1) == 0, return; end
         fileName = fullfile(filePath, fileName);
     else
-        fileName = uigetdir('*', 'Select an EGI .mff file/folder', 'MultiSelect', 'on');
-        if isnumeric(fileName) && fileName(1) == 0, return; end
+        fileName = uigetdir2('*', 'Select an EGI .mff folder(s)');
+        if isempty(fileName), return; end
+        if length(fileName) == 1, fileName = fileName{1}; end
     end
     
     if iscell(fileName)
@@ -138,3 +139,44 @@ com = sprintf('EEG = pop_mffimport(%s', vararg2str({fileName}));
 if exist('typefield', 'var'), com = sprintf([com  ',%s'],vararg2str({typefield})); end
 if saveData, com = [ com ',1' ]; end
 com = [com ');'];
+
+% function below downlaoded from https://www.mathworks.com/matlabcentral/fileexchange/32555-uigetfile_n_dir-select-multiple-files-and-directories
+% Copyright (c) 2011, Peugas
+% All rights reserved.
+function [pathname] = uigetdir2(start_path, dialog_title)
+% Pick multiple directories and/or files
+
+import javax.swing.JFileChooser;
+
+if nargin == 0 || isempty(start_path)
+    start_path = pwd;
+elseif numel(start_path) == 1
+    if start_path == 0 % Allow a null argument.
+        start_path = pwd;
+    end
+end
+
+jchooser = javaObjectEDT('javax.swing.JFileChooser', start_path);
+
+jchooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+if nargin > 1
+    jchooser.setDialogTitle(dialog_title);
+end
+
+jchooser.setMultiSelectionEnabled(true);
+
+status = jchooser.showOpenDialog([]);
+
+if status == JFileChooser.APPROVE_OPTION
+    jFile = jchooser.getSelectedFiles();
+	pathname{size(jFile, 1)}=[];
+    for i=1:size(jFile, 1)
+		pathname{i} = char(jFile(i).getAbsolutePath);
+	end
+	
+elseif status == JFileChooser.CANCEL_OPTION
+    pathname = [];
+else
+    error('Error occured while picking file.');
+end
+

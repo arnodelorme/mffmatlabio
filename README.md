@@ -37,6 +37,12 @@
 
 # Revision history
 ----------------
+Version 3.3
+- Fix reading on Windows
+
+Version 3.2
+- Fix error with boundary events
+
 Version 3.1
 - Implement auto-save for BIDS
 - Fix event track type for segmenting in Netstation

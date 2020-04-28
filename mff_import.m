@@ -108,7 +108,7 @@ EEG.srate = double(srate(1));
 EEG.pnts  = size(EEG.data,2);
 EEG.xmin  = 0;
 EEG.xmax  = 1;
-if exist('eeg_checkset.m', 'file')
+if exist('eeg_checkset.m', 'file') && exist('eeglab_options.m', 'file')
     EEG = eeg_checkset(EEG);
 end
 
