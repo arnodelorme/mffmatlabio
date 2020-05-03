@@ -37,6 +37,9 @@
 
 # Revision history
 ----------------
+Version 3.4
+- Fixes issues associated with reading data under Fieldtrip
+
 Version 3.3
 - Fix reading on Windows
 
