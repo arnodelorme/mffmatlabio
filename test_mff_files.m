@@ -112,6 +112,7 @@ inputFilenames(end+1).file = 'MFF_Files/Bugs/trevor/SSDE_P004_RSEEG_EO_BS_201809
 inputFilenames(end+1).file = 'MFF_Files/Bugs/zhaodi.mff';
 inputFilenames(end+1).file = 'MFF_Files/Bugs/issue21/EEG_VisualMotor_Run01.mff';
 inputFilenames(end+1).file = 'MFF_Files/Bugs/issue22/CNTL001_P50Sup_T1_20150608_1530.mff'; inputFilenames(end).info = 'Differences checked and OK - reference renamed for some reason';
+inputFilenames(end+1).file = 'MFF_Files/Bugs/issue25/2197LA_creativity1.mff'; inputFilenames(end).info = 'Differences checked and OK - reference renamed for some reason';
 
 %%
 ALLEEG = [];
