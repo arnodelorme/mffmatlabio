@@ -1,4 +1,4 @@
-# Known limitations to the Philips MFF import/export plugin
+# Known limitations to the EGI/Philips MFF import/export plugin
 ---------------------------------------------------------
 - Timing accuracy limited to 10-50 microseconds precision. Matlab 2014b time 
   conversion is not as precise as Matlab 2017a conversion (we can loose 1ms 
