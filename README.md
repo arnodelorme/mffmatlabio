@@ -1,4 +1,4 @@
-# Known limitations to the Philips MFF import/export plugin
+# Known limitations to the EGI/Philips MFF import/export plugin
 ---------------------------------------------------------
 - Timing accuracy limited to 10-50 microseconds precision. Matlab 2014b time 
   conversion is not as precise as Matlab 2017a conversion (we can loose 1ms 
@@ -26,8 +26,13 @@
 - Importing filter information and calibration information is not supported
   (except gain calibration which is applied to the data when it is imported)
 
-- When importing in standalone mode, if the file is exported, it will not
-  contain event keys
+- The plugin will import multiple subject trial averages in EEGLAB but the 
+   export is not correct or identical. The reason is that EEGLAB consider 
+   these averages as single trials from the same subject and cannot handle 
+   participant names.
+
+- When importing in standalone mode (not as an EEGLAB plugin, if the file 
+  is exported, it will not contain event keys
 
 - Video files are not imported and expoted
 
