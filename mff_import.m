@@ -144,6 +144,13 @@ EEG.etc.timezone   = info.timezone;
 EEG.etc.mffversion = info.version;
 EEG.etc.layout     = layout;
 EEG.etc.subject    = subject;
+if ~isempty(subject)
+    subjectFields = { subject.fields.name };
+    ind = strmatch('localIdentifier', subjectFields,  'exact');
+    if ~isempty(ind)
+        EEG.subject = subject.fields(ind).data;
+    end
+end
 
 % import coordinate layout
 [EEG.chanlocs, EEG.ref] = mff_importcoordinates(mffFile);
