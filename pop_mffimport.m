@@ -38,8 +38,10 @@
 function [EEG, com] = pop_mffimport(fileName, typefield, saveData)
 
 com = '';
-saveData = 0;
 matVer = ver('MATLAB');
+if nargin < 3
+    saveData = 0;
+end
 if datenum(matVer.Date) < 735595
     error('This version of Matlab is too old. Use version 2014a or later');
 end
@@ -130,8 +132,13 @@ for iFile = 1:length(fileName)
     EEGTMP = eeg_checkset(EEGTMP,'eventconsistency');
     if saveData
         EEGTMP = pop_saveset(EEGTMP, [ fileName{iFile}(1:end-4) '.set' ]);
+        EEGTMP(1).saved = 'justloaded';
     end
-    EEG = eeg_store(EEG, EEGTMP);
+    if iFile == 1
+        EEG = EEGTMP;
+    else
+        EEG(iFile) = EEGTMP;
+    end
 end
 
 % com = sprintf('EEG = pop_mffimport(''%s'', %s);', fileName, vararg2str({typefield}));
