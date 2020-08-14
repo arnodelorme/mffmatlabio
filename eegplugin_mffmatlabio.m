@@ -91,7 +91,7 @@ function versionstr = eegplugin_mffmatlabio(fig, trystrs, catchstrs)
     
     % menu callback commands
     % ----------------------
-    comload    = [  trystrs.no_check '[EEG, LASTCOM] = pop_mffimport;' catchstrs.store_and_hist ];
+    comload    = [  trystrs.no_check '[EEG, LASTCOM] = pop_mffimport;' catchstrs.new_non_empty ];
     comwrite   = [  trystrs.no_check 'LASTCOM = pop_mffexport(EEG);' catchstrs.store_and_hist ];
     
     % create menus (CHANGING THESE MENUS AFFECTS THE MAIN eeglab.m FUNCTION)
