@@ -42,6 +42,9 @@
 
 # Revision history
 ----------------
+Version 3.6
+- Fix exporting datasets with no events
+
 Version 3.5
 - Fixes issues associated with standalone use
 - Fix importing multiple datasets;
