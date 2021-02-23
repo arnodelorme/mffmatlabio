@@ -75,7 +75,7 @@ for iFile = 1:length(uniqueNames)
         indEvents = 1:length(events);
     end
     
-    if ~all(cellfun(@(x)isequal(x, 'boundary'), {events(indEvents).type}))
+    if ~isempty(events) && ~all(cellfun(@(x)isequal(x, 'boundary'), {events(indEvents).type}))
         eventtracktype = javaObject('com.egi.services.mff.api.MFFResourceType', javaMethod('valueOf', 'com.egi.services.mff.api.MFFResourceType$MFFResourceTypes', 'kMFF_RT_EventTrack'));
         if mfffactory.createResourceAtURI(eventtrackfilename, eventtracktype)
             disp('Success at creating the event file');

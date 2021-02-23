@@ -44,6 +44,8 @@
 ----------------
 Version 3.5
 - Fixes issues associated with standalone use
+- Fix importing multiple datasets;
+- Now import subject information into EEGLAB
 
 Version 3.4
 - Fixes issues associated with reading data under Fieldtrip
