@@ -58,8 +58,13 @@ for iEvent = 1:length(eventFile)
     eventtrackfilename = fullfile(mffFile, eventFile(iEvent).name);
     eventtracktype = javaObject('com.egi.services.mff.api.MFFResourceType', javaMethod('valueOf', 'com.egi.services.mff.api.MFFResourceType$MFFResourceTypes', 'kMFF_RT_EventTrack'));
     eventtrackObj = mfffactory.openResourceAtURI(eventtrackfilename, eventtracktype);
-    
-    if eventtrackObj.loadResource()
+
+    try
+        res = eventtrackObj.loadResource();
+    catch
+        error('Error loading event file. Remove special characters from XML event files and try again');
+    end
+    if res
         
         name      = eventtrackObj.getName();
         trackType = eventtrackObj.getTrackType();
