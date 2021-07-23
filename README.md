@@ -42,6 +42,10 @@
 
 # Revision history
 ----------------
+Version 3.7
+- Rename menu
+- Error message when MFF files contain XML characters
+
 Version 3.6
 - Fix exporting datasets with no events
 
