@@ -4,10 +4,17 @@
 %
 % Usage:
 %   EEG = mff_import(mffFile);
+%   EEG = mff_import(mffFile, correctEvents);
 %
 % Input:
 %  mffFile - filename/foldername for the MFF file (MFF file/folder must
 %            already exist)
+%
+% Optional input:
+%  correctEvents - [0|1] correct (overwrite) event files who have special
+%                  characters and cannot be imported by the Java library
+%                  (default is 0 or false)
+%
 % Output:
 %  EEG      - EEGLAB structure
 %  data     - channels x sample data
@@ -61,7 +68,7 @@
 % You should have received a copy of the GNU General Public License
 % along with mffmatlabio.  If not, see <https://www.gnu.org/licenses/>.
 
-function [EEG, data, events, chanlocs, mff] = mff_import(mffFile)
+function [EEG, data, events, chanlocs, mff] = mff_import(mffFile, correctEvents)
 
 %matVer = ver('MATLAB');
 %if datenum(matVer.Date) < 735595 % Matlab 2014a
@@ -71,6 +78,9 @@ function [EEG, data, events, chanlocs, mff] = mff_import(mffFile)
 if nargin < 1 
     help mff_import;
     return;
+end
+if nargin < 2
+    correctEvents = false;
 end
 
 % add full path if possible
@@ -199,7 +209,7 @@ end
 EEG.etc.recordingtime = begtime;
 
 % import events
-[EEG.event, newtimezone] = mff_importevents(mffFile, begtime, EEG.srate);
+[EEG.event, newtimezone] = mff_importevents(mffFile, begtime, EEG.srate, correctEvents);
 if ~isequal(EEG.etc.timezone, newtimezone) && ~isempty(newtimezone)
     error('Time zone issue');
 end
