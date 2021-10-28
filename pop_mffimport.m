@@ -16,6 +16,7 @@
 %            are provided, the fields are concatenated to create the EEGLAB
 %            type field.
 %  savedat - [0|1] automatically save imported dataset
+%  correctevents - [0|1] automatically correct events
 %
 % Output:
 %  EEG     - EEGLAB structure
@@ -35,12 +36,15 @@
 % You should have received a copy of the GNU General Public License
 % along with mffmatlabio.  If not, see <https://www.gnu.org/licenses/>.
 
-function [EEG, com] = pop_mffimport(fileName, typefield, saveData)
+function [EEG, com] = pop_mffimport(fileName, typefield, saveData, correctEvents)
 
 com = '';
 matVer = ver('MATLAB');
 if nargin < 3
     saveData = 0;
+end
+if nargin < 4
+    correctEvents = 0;
 end
 if datenum(matVer.Date) < 735595
     error('This version of Matlab is too old. Use version 2014a or later');
@@ -73,6 +77,30 @@ if nargin < 1
         if length(fileName) == 1, fileName = fileName{1}; end
     end
     
+    % scan event files
+    % ----------------
+    eventFiles = dir( fullfile(fileName, 'Events_*.xml'));
+    if ~isempty(eventFiles) || isfield(eventFiles, 'folder')
+        charAbove128 = false;
+        for iFile = 1:length(eventFiles)
+            if checkcharabove128(fullfile(eventFiles(iFile).folder, eventFiles(iFile).name))
+                charAbove128 = true;
+            end
+        end
+        
+        if charAbove128
+            res = questdlg2([ 'One of the event file has special characters, and' 10 ...
+                              'cannot be imported. Do you want to remove these' 10 ...
+                              'characters (backup the file as this cannot be undone)?' ], ...
+                         'Special character in event file', ...
+                         'Cancel', 'Remove', 'Remove');
+            if strcmpi(res, 'Cancel')
+                return;
+            end
+            correctEvents = 1;
+        end
+    end
+        
     if iscell(fileName)
         buttonName = questdlg2([ 'Do you want to automatically save imported datasets?' 10 ...
             '(the name will remain the same as the original dataset' 10 ...
@@ -88,7 +116,7 @@ end
 if ~iscell(fileName), fileName = { fileName }; end
 EEGTMP = [];
 for iFile = 1:length(fileName)
-    EEGTMP = mff_import(fileName{iFile});
+    EEGTMP = mff_import(fileName{iFile}, correctEvents);
     
     if nargin < 2 && iFile == 1
         if isempty(EEGTMP.event)
@@ -149,10 +177,7 @@ for iFile = 1:length(fileName)
 end
 
 % com = sprintf('EEG = pop_mffimport(''%s'', %s);', fileName, vararg2str({typefield}));
-com = sprintf('EEG = pop_mffimport(%s', vararg2str({fileName}));
-if exist('typefield', 'var'), com = sprintf([com  ',%s'],vararg2str({typefield})); end
-if saveData, com = [ com ',1' ]; end
-com = [com ');'];
+com = sprintf('EEG = pop_mffimport(%s);', vararg2str({fileName typefield saveData correctEvents}));
 
 % function below downlaoded from https://www.mathworks.com/matlabcentral/fileexchange/32555-uigetfile_n_dir-select-multiple-files-and-directories
 % Copyright (c) 2011, Peugas
@@ -194,3 +219,14 @@ else
     error('Error occured while picking file.');
 end
 
+function unicodeFlag = checkcharabove128(fileName)
+fid = fopen(fileName, 'r');
+if fid == -1
+    error('Cannot open file %s', fileName);
+end
+unicodeFlag = 0;
+while ~feof(fid)
+    str = fgetl(fid);
+    unicodeFlag = unicodeFlag | any(str > 128);
+end
+fclose(fid);
