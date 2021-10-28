@@ -96,5 +96,5 @@ function versionstr = eegplugin_mffmatlabio(fig, trystrs, catchstrs)
     
     % create menus (CHANGING THESE MENUS AFFECTS THE MAIN eeglab.m FUNCTION)
     % ------------
-    submenu = uimenu( menui, 'Label', 'Import EGI .mff file', 'separator', 'on', 'CallBack', comload);
-    submenu = uimenu( menue, 'Label', 'Export EGI .mff file', 'separator', 'on', 'CallBack', comwrite);
+    submenu = uimenu( menui, 'Label', 'Import Magstim/EGI .mff file', 'separator', 'on', 'CallBack', comload);
+    submenu = uimenu( menue, 'Label', 'Export Magstim/EGI .mff file', 'separator', 'on', 'CallBack', comwrite);

@@ -17,12 +17,12 @@
 
 clear
 if ispc
-    baseFolder = 'z:/data/philips';
+    baseFolder = 'z:/data/magstim';
     outputFolder = '';
     error('Change folders');
 elseif ismac
     baseFolder = '/Users/arno/GoogleDrive/EGI';
-    outputFolder = '/data/philips/temp/';
+    outputFolder = '/data/magstim/temp/';
 else
     baseFolder = '/home/xxx/matlab';
 end
@@ -74,7 +74,7 @@ inputFilenames(end+1).file = 'MFF_Files/OtherFilesRobert/bug629/pilot05_test 201
 inputFilenames(end+1).file = 'MFF_Files/OtherFilesRobert/original/eeg/egi/NS500Sine6Hz.mff';  'Differences in begintime due to File version 0 vs version 3 (nanoseconds vs microseconds) - OK';
 
 inputFilenames(end+1).file = 'MFF_Files/Bugs/SPBI023_20150414_1357.mff';
-inputFilenames(end+1).file = 'MFF_Files/Treys_files/MMVTD_Continuous_EEG.mff';
+inputFilenames(end+1).file = 'MFF_Files/Treys_files/MMVTD_Continuous_EEG.mff'; inputFilenames(end).info = 'Name difference is one TCP/IP event, not sure it can be fixed because name is not exported like other fields in mff_exportevents';
 inputFilenames(end+1).file = 'MFF_Files/Treys_files/MMI_HC1_20180314_093330_physio_only.mff'; inputFilenames(end).info = 'Issue with ''relativeBeginTime (event 364 differs) - field is not exported back and is not 0 in original file - field not used anyway';
 
 inputFilenames(end+1).file = 'MFF_Files/OtherFilesJoe/SLI_30.ave.mff';
@@ -128,7 +128,7 @@ datasetsToLoad = 1:length(inputFilenames); % dataset 16 POTENTIAL PROBLEM
 % end
 % return
 
-for iFile = length(datasetsToLoad)
+for iFile = 28 %7:length(datasetsToLoad)
     errorMsg = '';
     
     fprintf('Reading file %s\n', inputFilenames(iFile).file);

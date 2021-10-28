@@ -45,6 +45,13 @@ end
 if datenum(matVer.Date) < 735595
     error('This version of Matlab is too old. Use version 2014a or later');
 end
+if exist('pop_readegimff.m', 'file')
+    errordlg2( [ 'You have installed the MFFimport plugin.' 10 ...
+                'Please uninstall this plugin as it creates conflicts' 10 ...
+                'with the MFFmatlabIO plugin (and this function).' ]);
+   EEG = [];
+   return;
+end
 
 EEG = [];
 
