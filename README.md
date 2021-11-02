@@ -42,6 +42,12 @@
 
 # Revision history
 ----------------
+Version 4.0
+- Handle removed channels for exporting
+- Fixed compilation issues
+- Remove non-handle event characters
+- Handle conflict with MFFimport plugin
+
 Version 3.7
 - Rename menu
 - Error message when MFF files contain XML characters
