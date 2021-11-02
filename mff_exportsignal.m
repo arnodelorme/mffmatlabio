@@ -35,9 +35,8 @@ else
     pnsChans = [];
 end
 
+% Create a factory
 mff_path;
-
-% Create a factory.
 mfffactorydelegate = javaObject('com.egi.services.mff.api.LocalMFFFactoryDelegate');
 mfffactory = javaObject('com.egi.services.mff.api.MFFFactory', mfffactorydelegate);
 binfilename = { [mffFile filesep 'signal1.bin'] [mffFile filesep 'signal2.bin'] };
@@ -54,7 +53,7 @@ if isempty(chanRange{1})
     chanRange = { chanRange{2} [] };
     binfilename(2) = [];
 end
-    
+
 % Create Signal object and read in signal1.bin file.
 signalresourcetype = javaObject('com.egi.services.mff.api.MFFResourceType', javaMethod('valueOf', 'com.egi.services.mff.api.MFFResourceType$MFFResourceTypes', 'kMFF_RT_Signal'));
 

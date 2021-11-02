@@ -54,7 +54,7 @@ else
     tmp = javaMethod('valueOf', 'com.egi.services.mff.api.InfoN$InfoNFileType', 'kPNSData');
     tmp2 = javaObject('com.egi.services.mff.api.InfoNFileTypePNSData');
 end
-
+    
 info.setInfoNFileType(tmp);
 if isfield(EEG.etc, infon )
     if isfield(EEG.etc.(infon), 'infoNFileTypeInformation')
@@ -70,8 +70,22 @@ if isfield(EEG.etc, infon )
             tmp2.setPNSSetName('EEGLAB exported PNS channels');
         end
     end
+    if isfield(EEG.etc.(infon), 'ChannelStatus')
+        info.setChannelStatus(EEG.etc.(infon).ChannelStatus);
+    end
 else
     tmp2.setMontageName('EEGLAB exported montage');
 end
+
+% find missing channels and  set them to bad
+% tmp = javaObject('com.egi.services.mff.api.ChannelStatus');
+% tmp.setExclusion('badChannels');
+% tmp.setBinIndex(0);
+% jList = javaObject('java.util.ArrayList');
+% a = zeros(1,1,'int32'); a(1) = 1; jList.add(a);
+% a = zeros(1,1,'int32'); a(1) = 2; jList.add(a);
+% tmp.setChannels(jList);
+% info.setChannelStatus(tmp);
+
 info.setInfoNFileTypeInformation(tmp2);
 info.saveResource();
