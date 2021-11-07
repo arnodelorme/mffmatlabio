@@ -48,7 +48,7 @@ if ~exist(catURI)
 end
 epochResource = mfffactorydelegate.openResourceAtURI(catURI, epochsRType);
 continuous    = [];
-if epochResource.loadResource()
+if ~isempty(epochResource) && epochResource.loadResource()
     epochs = epochResource.getEpochs();
     fprintf('Importing epoch.xml ressource: %d data segments\n', epochs.size);
     

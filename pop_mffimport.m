@@ -177,6 +177,7 @@ for iFile = 1:length(fileName)
 end
 
 % com = sprintf('EEG = pop_mffimport(''%s'', %s);', fileName, vararg2str({typefield}));
+if ~exist('typefield', 'var'), typefield = ''; end
 com = sprintf('EEG = pop_mffimport(%s);', vararg2str({fileName typefield saveData correctEvents}));
 
 % function below downlaoded from https://www.mathworks.com/matlabcentral/fileexchange/32555-uigetfile_n_dir-select-multiple-files-and-directories

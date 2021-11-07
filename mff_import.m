@@ -222,11 +222,13 @@ cont = mff_importepochs(mffFile, info.version);
 cat = mff_importcategories(mffFile, info.version);
 
 % calculate epoch length
-allEpochLen = [ [cont.endtime] - [cont.begintime] ];
-if length(unique(allEpochLen)) > 1
-    fprintf([ 'IMPORTANT Warning: cannot import trials of different length\n' ... 
-              '  importing as segmented data (trial/category info will be lost)\n' ] );
-    cat = [];
+if ~isempty(cont)
+    allEpochLen = [ [cont.endtime] - [cont.begintime] ];
+    if length(unique(allEpochLen)) > 1
+        fprintf([ 'IMPORTANT Warning: cannot import trials of different length\n' ... 
+                  '  importing as segmented data (trial/category info will be lost)\n' ] );
+        cat = [];
+    end
 end
 
 if ~isempty(cat)
