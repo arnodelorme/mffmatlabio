@@ -346,9 +346,13 @@ else
             EEG.event(end).duration = eventDuration/1000000*EEG.srate; % in samples
             
             sampleCalculated = ((cont(iBound).begintime-discontinuities)/1000000)*EEG.srate;
-            sampleBlock      = blockSamples(cont(iBound).firstblock); % this assumes block of size 1
-            if abs(sampleCalculated-sampleBlock) > 1e-10
-                fprintf('Warning: segment discontinuity (%d samples missing - pause in the recording or bug?)\n', sampleCalculated-sampleBlock);
+            try
+                sampleBlock      = blockSamples(cont(iBound).firstblock); % this assumes block of size 1
+                if abs(sampleCalculated-sampleBlock) > 1e-10
+                    fprintf('Warning: segment discontinuity (%d samples missing - pause in the recording or bug?)\n', sampleCalculated-sampleBlock);
+                end
+            catch
+                disp('Warning: issue when calculating segment discontinuity');
             end
             EEG.event(end).latency  = (cont(iBound).begintime)/1000000*EEG.srate; % absolute time allow resorting events later
 %            EEG.event(end).latency  = sampleCalculated;
