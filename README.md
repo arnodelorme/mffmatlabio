@@ -42,6 +42,9 @@
 
 # Revision history
 ----------------
+Version 4.1
+- Avoid errors when discontinuities are present
+
 Version 4.0
 - Handle removed channels for exporting
 - Fixed compilation issues
