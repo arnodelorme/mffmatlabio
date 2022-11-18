@@ -202,8 +202,10 @@ if ~isempty(pnschans)
 end
 if exist('pop_chanedit', 'file')
     EEG=pop_chanedit(EEG, 'forcelocs',[],'nosedir','+Y');
+    EEG.chaninfo.filename = 'egimff';
 else
     EEG.chaninfo.nosedir = '+Y';
+    EEG.chaninfo.filename = 'egimff';
 end
 
 EEG.etc.recordingtime = begtime;

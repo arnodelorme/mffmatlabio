@@ -44,6 +44,7 @@
 ----------------
 Version 4.1
 - Avoid errors when discontinuities are present
+- Automatically detect channel location for source localization
 
 Version 4.0
 - Handle removed channels for exporting
