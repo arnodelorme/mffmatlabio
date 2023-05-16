@@ -61,7 +61,7 @@ if ~exist('vararg2str', 'file')
 end
 
 for iEvent = 1:length(eventFile)
-    eventtrackfilename = fullfile(mffFile, eventFile(iEvent).name);
+    eventtrackfilename = fullfile( eventFile(iEvent).folder, eventFile(iEvent).name);
     
     if correctEvents
         disp('Overwriting event files and removing special characters');
@@ -76,7 +76,7 @@ for iEvent = 1:length(eventFile)
     try
         res = eventtrackObj.loadResource();
     catch
-        error('Error loading event file. Remove special characters from XML event files and try again');
+        error('Error loading event file. Try calling the function pop_mffimport from the command line and set the option to correct events.');
     end
     if res
         
