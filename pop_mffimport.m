@@ -165,6 +165,7 @@ for iFile = 1:length(fileName)
         end
     end
     EEGTMP = eeg_checkset(EEGTMP,'eventconsistency');
+    EEGTMP = eeg_checkset(EEGTMP, 'makeur');
     if saveData
         EEGTMP = pop_saveset(EEGTMP, [ fileName{iFile}(1:end-4) '.set' ]);
         EEGTMP(1).saved = 'justloaded';
