@@ -61,8 +61,13 @@ if ~exist('vararg2str', 'file')
 end
 
 for iEvent = 1:length(eventFile)
+
+    if eventFile(iEvent).bytes == 0
+        fprintf(2, 'Empty event file detected %s\n', fullfile( eventFile(iEvent).folder, eventFile(iEvent).name));
+        continue
+    end
     eventtrackfilename = fullfile( eventFile(iEvent).folder, eventFile(iEvent).name);
-    
+
     if correctEvents
         disp('Overwriting event files and removing special characters');
         fixcharabove128(eventtrackfilename);
@@ -116,8 +121,14 @@ for iEvent = 1:length(eventFile)
                 
                 % compute latency in days with ms -> convert to samples
                 % eventCount = 1; 
-                events(eventCount).latency = (mff_decodetime(events(eventCount).begintime)-begTime)*multiplier;
-                
+                if events(eventCount).relativebegintime > 0 % for data epochs, this is required
+                    events(eventCount).latency = events(eventCount).relativebegintime / 1000000 * srate;
+                    % see bug 44, STAT events are supposed to be 42 ms
+                    % before the time locking events, this fixes the problem
+                else
+                    events(eventCount).latency = (mff_decodetime(events(eventCount).begintime)-begTime)*multiplier;
+                end
+
                 % dual time recoding
 %                 tmp = mff_encodetime(events(eventCount).latency/multiplier+begTime, '08:00')
 %                 fprintf('%s\n%s\n', events(eventCount).begintime, tmp);
