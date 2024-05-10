@@ -25,7 +25,7 @@
 % You should have received a copy of the GNU General Public License
 % along with mffmatlabio.  If not, see <https://www.gnu.org/licenses/>.
 
-function infoMatlab = mff_importinfo(mffFile)
+function [infoMatlab, beginTime] = mff_importinfo(mffFile)
 
 mff_path;
 mfffactorydelegate = javaObject('com.egi.services.mff.api.LocalMFFFactoryDelegate');
@@ -66,8 +66,8 @@ if ~isempty(info)
             infoMatlab.timezone = timeZone;
             
             % decode time
-            timeVal  = mff_decodetime(timeVal);
-            infoMatlab.recordtimematlab = timeVal;
+            beginTime = mff_decodetime(timeVal); % with millisec resolution
+            infoMatlab.recordtimematlab = mff_decodetime(timeVal); % string
             
         else
             fprintf( 'Error: Could not load Info resource; file might be corrupted.\n');
