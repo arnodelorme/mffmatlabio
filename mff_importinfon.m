@@ -103,6 +103,10 @@ txt = {};
 modified = false;
 while ~feof(fid)
     txt{end+1} = fgetl(fid);
+    if contains(txt{end},'<ch n="">')
+        modified = true;
+        txt(end) = [];
+    end    
     posStr = strfind(txt{end}, 'd">true');
     if ~isempty(posStr)
         modified = true;
@@ -112,6 +116,13 @@ end
 fclose(fid);
 
 if modified
+    try
+        filebackup = [fileName '_backup'];
+        copyfile(fileName, filebackup);
+    catch
+        error('Could not make a backup of file %s; check that the folder is writable',fileName);
+    end
+
     fid = fopen(fileName, 'w');
     if fid == -1
         error('Cannot modify original file to make it compatible with Java import librairy');
@@ -120,6 +131,9 @@ if modified
         fprintf(fid, '%s\n', txt{iTxt});
     end
     fclose(fid);
+    fprintf('File %s modified (otherwise the importer crashes); a backup was saved.\n',fileName);
+
+
 end
     
 
