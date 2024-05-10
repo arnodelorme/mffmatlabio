@@ -21,8 +21,8 @@ if ispc
     outputFolder = '';
     error('Change folders');
 elseif ismac
-    baseFolder = '/Users/arno/GoogleDrive/EGI';
-    outputFolder = '/data/magstim/temp/';
+    baseFolder = '/Users/arno/Google Drive/My Drive/EGI';
+    outputFolder = '/System/Volumes/Data/data/matlab/eeglab/plugins/mffmatlabio/temp/';
 else
     baseFolder = '/home/xxx/matlab';
 end
@@ -128,7 +128,7 @@ datasetsToLoad = 1:length(inputFilenames); % dataset 16 POTENTIAL PROBLEM
 % end
 % return
 
-for iFile = 8:length(datasetsToLoad)
+for iFile = 1:length(datasetsToLoad)
     errorMsg = '';
     
     fprintf('Reading file %s\n', inputFilenames(iFile).file);
@@ -137,7 +137,32 @@ for iFile = 8:length(datasetsToLoad)
         rmdir(outputFile, 's')
     end    
     
-    if strcmpi(testtarget, 'eeglab')
+    if strcmpi(testtarget, 'checkfiles')
+
+        res = exist(fullfile(baseFolder, inputFilenames(iFile).file));
+        if res == 0
+            fprintf('File not found %s\n', fullfile(baseFolder, inputFilenames(iFile).file));
+        else
+            % if 0
+            %     tmpFileNames = dir(fullfile(baseFolder, inputFilenames(iFile).file, 'Events*.xml'));
+            % 
+            %     for iFile = 1:length(tmpFileNames)
+            %         res = xml2struct(fullfile(tmpFileNames(iFile).folder, tmpFileNames(iFile).name));
+            %         if isfield(res.eventTrack, 'event')
+            %             if iscell(res.eventTrack.event{1}) && isfield(res.eventTrack.event{1}, 'relativebegintime')
+            %                 fprintf(2, 'Found relative time\n')
+            %             elseif isstruct(res.eventTrack.event{1}) && isfield(res.eventTrack.event, 'relativebegintime')
+            %                 fprintf(2, 'Found relative time\n')
+            %             end
+            %         end
+            %     end
+            % else
+            %     tmpFileNames = dir(fullfile(baseFolder, inputFilenames(iFile).file, 'Events*.xml'));
+            % 
+            % end
+        end
+
+    elseif strcmpi(testtarget, 'eeglab')
 
         % test EEGLAB import/export
         EEG = mff_import(fullfile(baseFolder, inputFilenames(iFile).file));
@@ -186,7 +211,7 @@ for iFile = 8:length(datasetsToLoad)
         end
     end
     
-    if ~strcmpi(testtarget, 'matlab')
+    if ~strcmpi(testtarget, 'matlab') && ~strcmpi(testtarget, 'checkfiles')
         diary(fileDairy);
         disp('-------------------------')
         fprintf('File number %d\nComparing reimported file %s\n', iFile, inputFilenames(iFile).file);
@@ -205,7 +230,9 @@ for iFile = 8:length(datasetsToLoad)
             eeglab redraw; 
         end
     else
-        disp('CANNOT COMPARE IMPORTED AND EXPORTED FILES USING THIS MODE');
+        if ~strcmpi(testtarget, 'checkfiles')
+            disp('CANNOT COMPARE IMPORTED AND EXPORTED FILES USING THIS MODE');
+        end
     end
 end
 diary off;
