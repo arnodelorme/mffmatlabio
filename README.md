@@ -42,6 +42,11 @@
 
 # Revision history
 ----------------
+Version 5.0
+- Fix event latency with segmented data files
+- Add aditional checks for epoch limits
+- Improve event time resolution
+
 Version 4.1
 - Avoid errors when discontinuities are present
 - Automatically detect channel location for source localization
