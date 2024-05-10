@@ -168,8 +168,8 @@ for iFile = 1:length(fileName)
     EEGTMP = eeg_checkset(EEGTMP, 'makeur');
     if saveData
         EEGTMP = pop_saveset(EEGTMP, [ fileName{iFile}(1:end-4) '.set' ]);
-        EEGTMP(1).saved = 'justloaded';
     end
+    EEGTMP(1).saved = 'justloaded';
     if iFile == 1
         EEG = EEGTMP;
     else
