@@ -145,8 +145,12 @@ for iFile = 1:length(fileName)
             
             % get data for each MFF event field
             dataField = cell(length(EEGTMP.event), length(typefield));
-            for iField = 1:length(typefield)
-                dataField(:,iField) = { EEGTMP.event.(typefield{iField}) }';
+            % get data for each MFF event field
+            dataField = cell(length(EEGTMP.event), length(typefield));
+            if ~isempty(dataField)
+                for iField = 1:length(typefield)
+                    dataField(:,iField) = { EEGTMP.event.(typefield{iField}) }';
+                end
             end
             
             % copy the data into EEGLAB event structure
