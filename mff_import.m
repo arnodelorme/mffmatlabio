@@ -146,11 +146,11 @@ if ~isempty(info2) && length(fieldnames(info2)) > 1
 end
 
 % import info file
-info    = mff_importinfo(mffFile);
+[info, begtime]= mff_importinfo(mffFile);
 layout  = mff_importsensorlayout(mffFile);
 subject = mff_importsubject(mffFile);
-begtime            = info.recordtimematlab;
 EEG.etc.timezone   = info.timezone;
+EEG.etc.recordingtime = info.recordtimematlab;
 EEG.etc.mffversion = info.version;
 EEG.etc.layout     = layout;
 EEG.etc.subject    = subject;
@@ -207,8 +207,6 @@ else
     EEG.chaninfo.nosedir = '+Y';
     EEG.chaninfo.filename = 'egimff';
 end
-
-EEG.etc.recordingtime = begtime;
 
 % import events
 [EEG.event, newtimezone] = mff_importevents(mffFile, begtime, EEG.srate, correctEvents);
@@ -274,8 +272,11 @@ if ~isempty(cat)
         % there is a natural jitter of a few millisecond for each time-locking
         % event within the uncertainty of the EEG sampling rate
         % epochDiffLat{iCat}(end+1) = cat(iCat).trials(iTrial(iCat)-1).eventbegin-cat(iCat).trials(iTrial(iCat)-1).begintime;
-        if catCont(iBound).eventbegin-catCont(iBound).begintime ~= EEG.xmin
-            % disp('Time locking event offset');
+        if -(catCont(iBound).eventbegin-catCont(iBound).begintime)/1000000 ~= EEG.xmin
+            diffms = (EEG.xmin+(catCont(iBound).eventbegin-catCont(iBound).begintime)/1000000)*1000;
+            if abs(diffms) > 1/EEG.srate*1000
+                fprintf(2, 'Time locking event discrepency of %1.2f ms which is larger than the tolerated %1.2f ms based on the sampling rate\n', diffms, 1/EEG.srate*1000 );
+            end
         end
         
         % check latency and block consistency
