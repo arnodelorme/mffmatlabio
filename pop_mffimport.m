@@ -145,11 +145,24 @@ for iFile = 1:length(fileName)
             
             % get data for each MFF event field
             dataField = cell(length(EEGTMP.event), length(typefield));
-            % get data for each MFF event field
-            dataField = cell(length(EEGTMP.event), length(typefield));
             if ~isempty(dataField)
                 for iField = 1:length(typefield)
-                    dataField(:,iField) = { EEGTMP.event.(typefield{iField}) }';
+                    if isfield(EEGTMP.event, typefield{iField})
+                        dataField(:,iField) = {EEGTMP.event.(typefield{iField}) }';
+                    else
+                        if strcmpi(typefield{iField},'code') && ...
+                                isfield(EEGTMP.event, 'type')
+                            if any(strcmpi(EEGTMP.event.type,{'code','boundary'}))
+                                warning('requested field %s not found',typefield{iField})
+                                warning('check your data, using field ''type'' with value %s',EEGTMP.event.type)
+                                dataField(:,iField) = {EEGTMP.event.type}';
+                            else
+                                error('requested field %s not found\n',typefield{iField})
+                            end
+                        else
+                          error('requested field %s not found\n',typefield{iField})
+                        end
+                    end
                 end
             end
             
